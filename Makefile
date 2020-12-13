@@ -5,14 +5,16 @@ install:
 
 	echo "Copy modified plugin to .oh-my-zsh/plugins..."
 	echo "To activate plugin enable gitignore-rust in .zshrc plugins"
+	mkdir -p $(HOME)/.oh-my-zsh/plugins/gitignore-rust/ && cp plugin.zsh $(HOME)/.oh-my-zsh/plugins/gitignore-rust/gitignore-rust.plugin.zsh
 
-	cp plugin.zsh $(HOME)/.oh-my-zsh/plugins/gitignore-rust/gitignore-rust.plogin.zsh
+	echo "Automatically run save on install"
+	gitignore_templates --save
 
 uninstall:
 	echo "Remove binary and cache file"
 	sudo rm /usr/local/bin/gitignore_templates
 	rm $(HOME)/.cache/gitignore_templates
-	rm $(HOME)/.oh
+	rm -r $(HOME)/.oh-my-zsh/plugins/gitignore-rust
 
 clean:
 	echo "Remove build destination folder"
