@@ -1,16 +1,24 @@
 use clap::{App, Arg};
 use reqwest;
 use std::fs;
+use dirs;
 
 fn save_to_file() -> Result<(), reqwest::Error> {
     let mut response = reqwest::blocking::get("https://www.gitignore.io/api/list")?.text()?;
     response = response.replace(",", "\n");
-    fs::write("/home/anatoliy/.cache/gitignore_templates", response).expect("Save failed!!!");
+    let mut save_path = dirs::home_dir().expect("Failed to gethome dir");
+    save_path.push(".cache");
+    save_path.push("gitignore_templates");
+    fs::write(save_path.into_os_string(), response).expect("Save failed!!!");
     Ok(())
 }
 
 fn get_template_names() -> String {
-    match fs::read_to_string("/home/anatoliy/.cache/gitignore_templates") {
+    let mut save_path = dirs::home_dir().expect("Failed to gethome dir");
+    save_path.push(".cache");
+    save_path.push("gitignore_templates");
+
+    match fs::read_to_string(save_path.into_os_string()) {
         Ok(templates) => templates,
         Err(_) => "".to_string(),
     }
